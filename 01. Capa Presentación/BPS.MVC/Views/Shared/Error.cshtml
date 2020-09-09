@@ -1,0 +1,43 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    var rutaURL = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + Url.Content("~/");
+    
+    ViewBag.Title = "Error";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- META SECTION -->
+    <title>@ViewBag.Title | BPS</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- EOF CSS INCLUDE -->
+</head>
+
+    <body>
+        <div class="error-container">
+            <div class="error-code">500</div>
+            <div class="error-text">ERROR INTERNO DEL SERVIDOR <br /> @TempData["ExceptionFechaGuia"]</div>
+            <div class="error-subtext">El servidor encontró un error interno o una configuración incorrecta y no pudo completar su solicitud.</div>
+            <div class="error-actions">                                
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-info btn-block btn-lg" onClick="document.location.href = '@rutaURL.ToString()';">Inicio</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-primary btn-block btn-lg" onClick="history.back();">Página anterior</button>
+                    </div>
+                </div>                                
+            </div>
+          
+        </div>                 
+    </body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-sm-12">
+<div class="card">
+  <div class="card-header">
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand">Estudiantes</a>
+      <form class="form-inline">
+        <button class="btn btn-outline-success my-2 my-sm-0" (click)="add()">Nuevo</button>
+      </form>
+    </nav>
+  </div>
+  <div class="card-body">
+    <div class="clearfix">&nbsp;</div>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let p of estudiantes; let i=index;">
+        <a routerLink="/estudiante-details/{{p.idEstudiante}}">
+          <span class="badge">{{i+1}}</span> {{p.nombre}} 
+        </a>
+        <button (click)="delete(p.idEstudiante)" class="badge badge-danger badge-pill">
+           x
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+</div>
+
+  
+</div>

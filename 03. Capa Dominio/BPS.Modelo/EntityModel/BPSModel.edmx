@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BPSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Estudiante">
+          <Key>
+            <PropertyRef Name="idEstudiante" />
+          </Key>
+          <Property Name="idEstudiante" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Nota">
+          <Key>
+            <PropertyRef Name="idNota" />
+          </Key>
+          <Property Name="idNota" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idProfesor" Type="bigint" Nullable="false" />
+          <Property Name="idEstudiante" Type="bigint" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="valor" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Profesor">
+          <Key>
+            <PropertyRef Name="idProfesor" />
+          </Key>
+          <Property Name="idProfesor" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Nota_Estudiante">
+          <End Role="Estudiante" Type="Self.Estudiante" Multiplicity="1" />
+          <End Role="Nota" Type="Self.Nota" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estudiante">
+              <PropertyRef Name="idEstudiante" />
+            </Principal>
+            <Dependent Role="Nota">
+              <PropertyRef Name="idEstudiante" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Nota_Profesor">
+          <End Role="Profesor" Type="Self.Profesor" Multiplicity="1" />
+          <End Role="Nota" Type="Self.Nota" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesor">
+              <PropertyRef Name="idProfesor" />
+            </Principal>
+            <Dependent Role="Nota">
+              <PropertyRef Name="idProfesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ConsultarNotasEstudiantes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="InsertarNotaEstudiante" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idNota" Type="bigint" Mode="In" />
+          <Parameter Name="idProfesor" Type="bigint" Mode="In" />
+          <Parameter Name="idEstudiante" Type="bigint" Mode="In" />
+          <Parameter Name="nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="valor" Type="numeric" Mode="In" />
+        </Function>
+        <EntityContainer Name="BPSModelStoreContainer">
+          <EntitySet Name="Estudiante" EntityType="Self.Estudiante" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Nota" EntityType="Self.Nota" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Profesor" EntityType="Self.Profesor" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Nota_Estudiante" Association="Self.FK_Nota_Estudiante">
+            <End Role="Estudiante" EntitySet="Estudiante" />
+            <End Role="Nota" EntitySet="Nota" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Nota_Profesor" Association="Self.FK_Nota_Profesor">
+            <End Role="Profesor" EntitySet="Profesor" />
+            <End Role="Nota" EntitySet="Nota" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BPSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="BPSEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="ConsultarNotasEstudiantes" ReturnType="Collection(BPSModel.ConsultarNotasEstudiantes_Result)" />
+          <FunctionImport Name="InsertarNotaEstudiante">
+            <Parameter Name="idNota" Mode="In" Type="Int64" />
+            <Parameter Name="idProfesor" Mode="In" Type="Int64" />
+            <Parameter Name="idEstudiante" Mode="In" Type="Int64" />
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="valor" Mode="In" Type="Decimal" />
+          </FunctionImport>
+          <EntitySet Name="Estudiante" EntityType="BPSModel.Estudiante" />
+          <EntitySet Name="Nota" EntityType="BPSModel.Nota" />
+          <EntitySet Name="Profesor" EntityType="BPSModel.Profesor" />
+          <AssociationSet Name="FK_Nota_Estudiante" Association="BPSModel.FK_Nota_Estudiante">
+            <End Role="Estudiante" EntitySet="Estudiante" />
+            <End Role="Nota" EntitySet="Nota" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Nota_Profesor" Association="BPSModel.FK_Nota_Profesor">
+            <End Role="Profesor" EntitySet="Profesor" />
+            <End Role="Nota" EntitySet="Nota" />
+          </AssociationSet>
+        </EntityContainer>
+        <ComplexType Name="ConsultarNotasEstudiantes_Result">
+          <Property Type="Int64" Name="idEstudiante" Nullable="false" />
+          <Property Type="Int64" Name="idProfesor" Nullable="false" />
+          <Property Type="Int64" Name="idNota" Nullable="false" />
+          <Property Type="String" Name="NotaString" Nullable="false" MaxLength="150" />
+          <Property Type="Decimal" Name="ValorNota" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="String" Name="NombreEstudiante" Nullable="false" MaxLength="150" />
+          <Property Type="String" Name="NombreProfesor" Nullable="false" MaxLength="150" />
+        </ComplexType>
+        <EntityType Name="Estudiante">
+          <Key>
+            <PropertyRef Name="idEstudiante" />
+          </Key>
+          <Property Name="idEstudiante" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Nota" Relationship="BPSModel.FK_Nota_Estudiante" FromRole="Estudiante" ToRole="Nota" />
+        </EntityType>
+        <EntityType Name="Nota">
+          <Key>
+            <PropertyRef Name="idNota" />
+          </Key>
+          <Property Name="idNota" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idProfesor" Type="Int64" Nullable="false" />
+          <Property Name="idEstudiante" Type="Int64" Nullable="false" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="valor" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Estudiante" Relationship="BPSModel.FK_Nota_Estudiante" FromRole="Nota" ToRole="Estudiante" />
+          <NavigationProperty Name="Profesor" Relationship="BPSModel.FK_Nota_Profesor" FromRole="Nota" ToRole="Profesor" />
+        </EntityType>
+        <EntityType Name="Profesor">
+          <Key>
+            <PropertyRef Name="idProfesor" />
+          </Key>
+          <Property Name="idProfesor" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Nota" Relationship="BPSModel.FK_Nota_Profesor" FromRole="Profesor" ToRole="Nota" />
+        </EntityType>
+        <Association Name="FK_Nota_Estudiante">
+          <End Type="BPSModel.Estudiante" Role="Estudiante" Multiplicity="1" />
+          <End Type="BPSModel.Nota" Role="Nota" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estudiante">
+              <PropertyRef Name="idEstudiante" />
+            </Principal>
+            <Dependent Role="Nota">
+              <PropertyRef Name="idEstudiante" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Nota_Profesor">
+          <End Type="BPSModel.Profesor" Role="Profesor" Multiplicity="1" />
+          <End Type="BPSModel.Nota" Role="Nota" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Profesor">
+              <PropertyRef Name="idProfesor" />
+            </Principal>
+            <Dependent Role="Nota">
+              <PropertyRef Name="idProfesor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BPSModelStoreContainer" CdmEntityContainer="BPSEntities">
+          <FunctionImportMapping FunctionImportName="ConsultarNotasEstudiantes" FunctionName="BPSModel.Store.ConsultarNotasEstudiantes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BPSModel.ConsultarNotasEstudiantes_Result">
+                <ScalarProperty Name="idEstudiante" ColumnName="idEstudiante" />
+                <ScalarProperty Name="idProfesor" ColumnName="idProfesor" />
+                <ScalarProperty Name="idNota" ColumnName="idNota" />
+                <ScalarProperty Name="NotaString" ColumnName="NotaString" />
+                <ScalarProperty Name="ValorNota" ColumnName="ValorNota" />
+                <ScalarProperty Name="NombreEstudiante" ColumnName="NombreEstudiante" />
+                <ScalarProperty Name="NombreProfesor" ColumnName="NombreProfesor" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertarNotaEstudiante" FunctionName="BPSModel.Store.InsertarNotaEstudiante" />
+          <EntitySetMapping Name="Estudiante">
+            <EntityTypeMapping TypeName="BPSModel.Estudiante">
+              <MappingFragment StoreEntitySet="Estudiante">
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="idEstudiante" ColumnName="idEstudiante" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Nota">
+            <EntityTypeMapping TypeName="BPSModel.Nota">
+              <MappingFragment StoreEntitySet="Nota">
+                <ScalarProperty Name="valor" ColumnName="valor" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="idEstudiante" ColumnName="idEstudiante" />
+                <ScalarProperty Name="idProfesor" ColumnName="idProfesor" />
+                <ScalarProperty Name="idNota" ColumnName="idNota" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Profesor">
+            <EntityTypeMapping TypeName="BPSModel.Profesor">
+              <MappingFragment StoreEntitySet="Profesor">
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="idProfesor" ColumnName="idProfesor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
